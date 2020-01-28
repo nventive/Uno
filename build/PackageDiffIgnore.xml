@@ -3657,7 +3657,10 @@
       <Member
 				fullName="System.Void Windows.ApplicationModel.Contacts.ContactBatch..ctor()"
 				reason="Method not in UWP contract" />
-		</Methods>
+          <Member
+              fullName="System.Void Windows.ApplicationModel.Contacts.ContactReader..ctor()"
+              reason="public ctor does not exist in UWP"/>
+        </Methods>
 	</IgnoreSet>
 	<IgnoreSet baseVersion="3.6.6">
 	  <Types>
