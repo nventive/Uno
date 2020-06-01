@@ -63,8 +63,9 @@ namespace Windows.UI.Xaml.Media
 
 		public static void Write(this StreamGeometryContext ctx, PathFigure pathFigure)
 		{
-			ctx.BeginFigure(pathFigure.StartPoint, pathFigure.IsFilled, pathFigure.IsClosed);
+			ctx.BeginFigure(pathFigure.StartPoint, pathFigure.IsFilled);
 			pathFigure.Segments.ForEach(ctx.Write);
+			ctx.SetClosedState(pathFigure.IsClosed);
 		}
 
 		public static void Write(this StreamGeometryContext ctx, PathSegment pathSegment)

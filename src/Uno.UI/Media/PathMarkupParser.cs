@@ -126,7 +126,7 @@ namespace Uno.Media
                             }
 
                             point = ReadPoint(reader, point, relative);
-                            _context.BeginFigure(point, true, false);
+                            _context.BeginFigure(point, true);
                             openFigure = true;
                             previousControlPoint = null;
                             break;
@@ -463,4 +463,3 @@ namespace Uno.Media
         }
     }
 }
- 

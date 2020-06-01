@@ -1,23 +1,27 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using CoreAnimation;
 using CoreGraphics;
-using Uno.Disposables;
 using Uno.Media;
 using Windows.Foundation;
 
 namespace Windows.UI.Xaml.Shapes
 {
-	public partial class Line
+	public partial class Line : Shape
 	{
-		protected override CGPath GetPath(Size availableSize)
+		/// <inheritdoc />
+		protected override Size MeasureOverride(Size availableSize)
+			=> MeasureAbsoluteShape(availableSize, GetPath());
+
+		/// <inheritdoc />
+		protected override Size ArrangeOverride(Size finalSize)
+			=> ArrangeAbsoluteShape(finalSize, GetPath());
+
+		private CGPath GetPath()
 		{
 			if (Math.Abs(X1 - X2) > double.Epsilon || Math.Abs(Y1 - Y2) > double.Epsilon)
 			{
 				var streamGeometry = GeometryHelper.Build(c =>
 				{
-					c.BeginFigure(new Point(X1, Y1), false, false);
+					c.BeginFigure(new Point(X1, Y1), false);
 					c.LineTo(new Point(X2, Y2), false, false);
 				});
 
@@ -25,13 +29,6 @@ namespace Windows.UI.Xaml.Shapes
 			}
 
 			return null;
-		}
-
-		partial void InitializePartial()
-		{
-#if __IOS__
-			ClipsToBounds = false;
-#endif
 		}
 	}
 }

@@ -26,9 +26,9 @@ namespace Uno.Media
 			_builder.AppendFormat("c.ArcTo({0}, {1}, {2}, {3}, {4}, true, false);\n", Point.ToCode(), Size.ToCode(), rotationAngle.ToCode(), isLargeArc.ToCode(), sweepDirection.ToCode());
 		}
 
-		public override void BeginFigure(Point startPoint, bool isFilled, bool isClosed)
+		public override void BeginFigure(Point startPoint, bool isFilled)
 		{
-			_builder.AppendFormat("c.BeginFigure({0}, true, false);\n", startPoint.ToCode());
+			_builder.AppendFormat("c.BeginFigure({0}, true);\n", startPoint.ToCode());
 		}
 
 		public override void BezierTo(Point Point1, Point Point2, Point Point3, bool isStroked, bool isSmoothJoin)
