@@ -87,7 +87,7 @@ namespace Windows.UI.Xaml.Controls
 			}
 		}
 		#endif
-		#if __ANDROID__ || __IOS__ || NET461 || __WASM__ || __MACOS__
+		#if false || false || false || false || false
 		[global::Uno.NotImplemented]
 		public  global::Windows.UI.Xaml.Media.SolidColorBrush SelectionHighlightColor
 		{
@@ -145,7 +145,7 @@ namespace Windows.UI.Xaml.Controls
 			}
 		}
 		#endif
-		#if __ANDROID__ || __IOS__ || NET461 || __WASM__ || __MACOS__
+		#if false || false || false || false || false
 		[global::Uno.NotImplemented]
 		public  global::Windows.UI.Xaml.Media.Brush PlaceholderForeground
 		{
@@ -294,7 +294,7 @@ namespace Windows.UI.Xaml.Controls
 		// Skipping already declared property AcceptsReturnProperty
 		// Skipping already declared property HeaderTemplateProperty
 		// Skipping already declared property HeaderProperty
-		#if __ANDROID__ || __IOS__ || NET461 || __WASM__ || __MACOS__
+		#if false || false || false || false || false
 		[global::Uno.NotImplemented]
 		public static global::Windows.UI.Xaml.DependencyProperty SelectionHighlightColorProperty { get; } = 
 		Windows.UI.Xaml.DependencyProperty.Register(
@@ -343,7 +343,7 @@ namespace Windows.UI.Xaml.Controls
 			typeof(global::Windows.UI.Xaml.Controls.TextBox), 
 			new FrameworkPropertyMetadata(default(global::Windows.UI.Xaml.Media.SolidColorBrush)));
 		#endif
-		#if __ANDROID__ || __IOS__ || NET461 || __WASM__ || __MACOS__
+		#if false || false || false || false || false
 		[global::Uno.NotImplemented]
 		public static global::Windows.UI.Xaml.DependencyProperty PlaceholderForegroundProperty { get; } = 
 		Windows.UI.Xaml.DependencyProperty.Register(

@@ -87,10 +87,11 @@ namespace Windows.UI.Xaml.Controls
 			OnAcceptsReturnChanged(CreateInitialValueChangerEventArgs(AcceptsReturnProperty, null, AcceptsReturn));
 			OnIsReadonlyChanged(CreateInitialValueChangerEventArgs(IsReadOnlyProperty, null, IsReadOnly));
 			OnIsEnabledChanged(false, IsEnabled);
-			OnForegroundColorChanged(null, Foreground);
+			OnForegroundColorChanged(null, Foreground);			
 			UpdateFontPartial();
 			OnHeaderChanged();
 			OnIsTextPredictionEnabledChanged(CreateInitialValueChangerEventArgs(IsTextPredictionEnabledProperty, IsTextPredictionEnabledProperty.GetMetadata(GetType()).DefaultValue, IsTextPredictionEnabled));
+			OnSelectionHighlightColorChanged(CreateInitialValueChangerEventArgs(SelectionHighlightColorProperty, SelectionHighlightColorProperty.GetMetadata(GetType()).DefaultValue, SelectionHighlightColor));
 			OnIsSpellCheckEnabledChanged(CreateInitialValueChangerEventArgs(IsSpellCheckEnabledProperty, IsSpellCheckEnabledProperty.GetMetadata(GetType()).DefaultValue, IsSpellCheckEnabled));
 			OnTextAlignmentChanged(CreateInitialValueChangerEventArgs(TextAlignmentProperty, TextAlignmentProperty.GetMetadata(GetType()).DefaultValue, TextAlignment));
 			OnTextWrappingChanged(CreateInitialValueChangerEventArgs(TextWrappingProperty, TextWrappingProperty.GetMetadata(GetType()).DefaultValue, TextWrapping));
@@ -299,6 +300,8 @@ namespace Windows.UI.Xaml.Controls
 
 		partial void OnForegroundColorChangedPartial(Brush newValue);
 
+
+
 		#region PlaceholderText DependencyProperty
 
 		public string PlaceholderText
@@ -314,6 +317,61 @@ namespace Windows.UI.Xaml.Controls
 				typeof(TextBox),
 				new PropertyMetadata(defaultValue: string.Empty)
 			);
+
+		#endregion
+
+		#region SelectionHighlightColor DependencyProperty
+
+		public SolidColorBrush SelectionHighlightColor
+		{
+			get
+			{
+				return (SolidColorBrush)this.GetValue(SelectionHighlightColorProperty);
+			}
+			set
+			{
+				this.SetValue(SelectionHighlightColorProperty, value);
+			}
+		}
+
+		public static DependencyProperty SelectionHighlightColorProperty { get; } =
+			DependencyProperty.Register(
+				nameof(SelectionHighlightColor), typeof(SolidColorBrush),
+				typeof(TextBox),
+				new PropertyMetadata(
+					default(SolidColorBrush),
+					propertyChangedCallback: (s, e) => ((TextBox)s)?.OnSelectionHighlightColorChanged(e)));
+
+		private void OnSelectionHighlightColorChanged(DependencyPropertyChangedEventArgs e)
+		{
+			var value = e.NewValue as SolidColorBrush;
+			OnSelectionHighlightColorChangedPartial(value?.ColorWithOpacity);
+		}
+
+		partial void OnSelectionHighlightColorChangedPartial(Color? e);
+
+		#endregion
+
+		#region PlaceholderForeground DependencyProperty
+
+		public Brush PlaceholderForeground
+		{
+			get
+			{
+				return (Brush)this.GetValue(PlaceholderForegroundProperty);
+			}
+			set
+			{
+				this.SetValue(PlaceholderForegroundProperty, value);
+			}
+		}
+
+		
+		public static DependencyProperty PlaceholderForegroundProperty { get; } = 
+			DependencyProperty.Register(
+				nameof(PlaceholderForeground), typeof(Brush), 
+				typeof(TextBox), 
+			new PropertyMetadata(default(Brush)));
 
 		#endregion
 
@@ -348,9 +406,9 @@ namespace Windows.UI.Xaml.Controls
 		protected void OnInputScopeChanged(DependencyPropertyChangedEventArgs e) => OnInputScopeChangedPartial(e);
 		partial void OnInputScopeChangedPartial(DependencyPropertyChangedEventArgs e);
 
-		#endregion
+#endregion
 
-		#region MaxLength DependencyProperty
+#region MaxLength DependencyProperty
 
 		public int MaxLength
 		{
@@ -373,9 +431,9 @@ namespace Windows.UI.Xaml.Controls
 
 		partial void OnMaxLengthChangedPartial(DependencyPropertyChangedEventArgs e);
 
-		#endregion
+#endregion
 
-		#region AcceptsReturn DependencyProperty
+#region AcceptsReturn DependencyProperty
 
 		public bool AcceptsReturn
 		{
@@ -402,9 +460,9 @@ namespace Windows.UI.Xaml.Controls
 
 		partial void OnAcceptsReturnChangedPartial(DependencyPropertyChangedEventArgs e);
 
-		#endregion
+#endregion
 
-		#region TextWrapping DependencyProperty
+#region TextWrapping DependencyProperty
 		public TextWrapping TextWrapping
 		{
 			get => (TextWrapping)this.GetValue(TextWrappingProperty);
@@ -429,9 +487,9 @@ namespace Windows.UI.Xaml.Controls
 
 		partial void OnTextWrappingChangedPartial(DependencyPropertyChangedEventArgs e);
 
-		#endregion
+#endregion
 
-		#region IsReadOnly DependencyProperty
+#region IsReadOnly DependencyProperty
 
 		public bool IsReadOnly
 		{
@@ -458,9 +516,9 @@ namespace Windows.UI.Xaml.Controls
 
 		partial void OnIsReadonlyChangedPartial(DependencyPropertyChangedEventArgs e);
 
-		#endregion
+#endregion
 
-		#region Header DependencyProperties
+#region Header DependencyProperties
 
 		public object Header
 		{
@@ -502,9 +560,9 @@ namespace Windows.UI.Xaml.Controls
 			}
 		}
 
-		#endregion
+#endregion
 
-		#region IsSpellCheckEnabled DependencyProperty
+#region IsSpellCheckEnabled DependencyProperty
 
 		public bool IsSpellCheckEnabled
 		{
@@ -527,9 +585,9 @@ namespace Windows.UI.Xaml.Controls
 
 		partial void OnIsSpellCheckEnabledChangedPartial(DependencyPropertyChangedEventArgs e);
 
-		#endregion
+#endregion
 
-		#region IsTextPredictionEnabled DependencyProperty
+#region IsTextPredictionEnabled DependencyProperty
 
 		[Uno.NotImplemented]
 		public bool IsTextPredictionEnabled
@@ -554,9 +612,9 @@ namespace Windows.UI.Xaml.Controls
 
 		partial void OnIsTextPredictionEnabledChangedPartial(DependencyPropertyChangedEventArgs e);
 
-		#endregion
+#endregion
 
-		#region TextAlignment DependencyProperty
+#region TextAlignment DependencyProperty
 
 #if XAMARIN_ANDROID
 		public new TextAlignment TextAlignment
@@ -576,7 +634,7 @@ namespace Windows.UI.Xaml.Controls
 
 		partial void OnTextAlignmentChangedPartial(DependencyPropertyChangedEventArgs e);
 
-		#endregion
+#endregion
 
 		internal override void UpdateFocusState(FocusState focusState)
 		{
