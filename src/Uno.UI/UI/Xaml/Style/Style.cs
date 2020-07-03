@@ -68,8 +68,13 @@ namespace Windows.UI.Xaml
 						pair.Value(o);
 					}
 
+					var elementTheme = ElementTheme.Default;
+					if (o is FrameworkElement frameworkElement)
+					{
+						elementTheme = frameworkElement.RequestedTheme;
+					}
 					// Check tree for resource binding values, since some Setters may have set ThemeResource-backed values
-					(o as IDependencyObjectStoreProvider).Store.UpdateResourceBindings(isThemeChangedUpdate: false);
+					(o as IDependencyObjectStoreProvider).Store.UpdateResourceBindings(isThemeChangedUpdate: false, elementTheme);
 				}
 #if !HAS_EXPENSIVE_TRYFINALLY
 				finally
