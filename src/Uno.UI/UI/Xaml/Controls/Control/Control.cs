@@ -44,7 +44,7 @@ namespace Windows.UI.Xaml.Controls
 
 		private void InitializeControl()
 		{
-			SetDefaultForeground(ForegroundProperty);
+			UpdateForeground();
 			SubscribeToOverridenRoutedEvents();
 			OnIsFocusableChanged();
 
@@ -55,7 +55,7 @@ namespace Windows.UI.Xaml.Controls
 
 		protected override bool IsSimpleLayout => true;
 
-		private void SetDefaultForeground()
+		private void UpdateForeground()
 		{
 			//override the default value from dependency property based on application theme
 			//and requested element theme
@@ -83,8 +83,7 @@ namespace Windows.UI.Xaml.Controls
 		{
 			base.UpdateThemeBindings();
 
-			//override the default value from dependency property based on application theme
-			SetDefaultForeground(ForegroundProperty);
+			UpdateForeground();
 		}
 
 		private protected override Type GetDefaultStyleKey() => DefaultStyleKey as Type;

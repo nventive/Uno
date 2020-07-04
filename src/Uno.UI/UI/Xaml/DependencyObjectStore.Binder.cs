@@ -149,7 +149,13 @@ namespace Windows.UI.Xaml
 		{
 			_properties.ApplyCompiledBindings();
 			InvokeCompiledBindingsCallbacks();
-			UpdateResourceBindings(isThemeChangedUpdate: false, ElementTheme.Default);
+			
+			var theme = ElementTheme.Default;
+			if(ActualInstance is FrameworkElement frameworkElement)
+			{
+				theme = frameworkElement.RequestedTheme;
+			}
+			UpdateResourceBindings(isThemeChangedUpdate: false, theme);
 		}
 
 		private IDisposable? RegisterCompiledBindingsUpdates()
