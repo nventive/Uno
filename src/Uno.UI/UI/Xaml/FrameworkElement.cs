@@ -107,7 +107,7 @@ namespace Windows.UI.Xaml
 
 			IFrameworkElementHelper.Initialize(this);
 
-			UpdateActualTheme();
+			UpdateActualTheme(ElementTheme.Default);
 		}
 
 		public
@@ -393,20 +393,39 @@ namespace Windows.UI.Xaml
 				nameof(RequestedTheme),
 				typeof(ElementTheme),
 				typeof(FrameworkElement),
-				new FrameworkPropertyMetadata(
+				new PropertyMetadata(
 					ElementTheme.Default,
-					FrameworkPropertyMetadataOptions.Inherits,
 					OnRequestedThemePropertyChanged));
 
 		private static void OnRequestedThemePropertyChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs args)
-		{			
-			var frameworkElement = (FrameworkElement)dependencyObject;
-			frameworkElement.UpdateThemeBindings();
-			// Update actual theme on the element where RequestedTheme has been explicitly set
-			// and let DP inheritance handle the rest.
-			if (args.NewPrecedence < DependencyPropertyValuePrecedences.Inheritance)
+		{
+			PropagateThemeScope(dependencyObject, ElementTheme.Default);
+		}
+
+		internal static void PropagateThemeScope(object instance, ElementTheme theme)
+		{
+			// Update ThemeResource references that have changed
+			if (instance is FrameworkElement fe)
 			{
-				frameworkElement.UpdateActualTheme();
+				fe.UpdateActualTheme(theme);
+				theme = fe.ActualTheme;
+				fe.UpdateThemeBindings();
+			}
+
+			//Try Panel.Children before ViewGroup.GetChildren - this results in fewer allocations
+			if (instance is Controls.Panel p)
+			{
+				foreach (object o in p.Children)
+				{
+					PropagateThemeScope(o, theme);
+				}
+			}
+			else if (instance is ViewGroup g)
+			{
+				foreach (object o in g.GetChildren())
+				{
+					PropagateThemeScope(o, theme);
+				}
 			}
 		}
 
@@ -421,14 +440,13 @@ namespace Windows.UI.Xaml
 				nameof(ActualTheme),
 				typeof(ElementTheme),
 				typeof(FrameworkElement),
-				new FrameworkPropertyMetadata(
+				new PropertyMetadata(
 					ElementTheme.Default,
-					FrameworkPropertyMetadataOptions.Inherits,
 					OnActualThemePropertyChanged));
 
 		private static void OnActualThemePropertyChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs args)
 		{
-			if (args.NewPrecedence < DependencyPropertyValuePrecedences.Inheritance)
+			if (args.NewPrecedence < DependencyPropertyValuePrecedences.DefaultValue)
 			{
 				throw new InvalidOperationException($"{nameof(ActualThemeProperty)} is read-only.");
 			}
@@ -438,9 +456,27 @@ namespace Windows.UI.Xaml
 
 		#endregion
 
-		private void UpdateActualTheme()
+		/// <summary>
+		/// Updates the Actual theme.
+		/// </summary>
+		/// <param name="parentTheme">Parent actual theme or default.</param>
+		internal void UpdateActualTheme(ElementTheme parentTheme)
 		{
-			if (RequestedTheme == ElementTheme.Default)
+			if (RequestedTheme != ElementTheme.Default)
+			{
+				this.SetValue(
+					ActualThemeProperty,
+					RequestedTheme,
+					DependencyPropertyValuePrecedences.DefaultValue);
+			}
+			else if (parentTheme != ElementTheme.Default)
+			{
+				this.SetValue(
+					ActualThemeProperty,
+					parentTheme,
+					DependencyPropertyValuePrecedences.DefaultValue);
+			}
+			else
 			{
 				// Set application theme as actual
 				this.SetValue(
@@ -448,10 +484,6 @@ namespace Windows.UI.Xaml
 					Application.Current?.RequestedTheme == ApplicationTheme.Dark ?
 						ElementTheme.Dark : ElementTheme.Light,
 					DependencyPropertyValuePrecedences.DefaultValue);
-			}
-			else
-			{
-				this.SetValue(ActualThemeProperty, RequestedTheme, DependencyPropertyValuePrecedences.DefaultValue);
 			}
 		}
 
@@ -706,8 +738,8 @@ namespace Windows.UI.Xaml
 		/// </summary>
 		internal virtual void UpdateThemeBindings()
 		{
-			Resources?.UpdateThemeBindings();
-			(this as IDependencyObjectStoreProvider).Store.UpdateResourceBindings(isThemeChangedUpdate: true, RequestedTheme);
+			//TODO: should update bindings on non-UI DO children
+			(this as IDependencyObjectStoreProvider).Store.UpdateResourceBindings(isThemeChangedUpdate: true, ActualTheme);
 		}
 
 		/// <summary>

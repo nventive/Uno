@@ -205,55 +205,9 @@ namespace Windows.UI.Xaml
 
 		private void OnRequestedThemeChanged()
 		{
-			if (GetTreeRoot() is FrameworkElement root)
-			{
-				// Update theme bindings in application resources
-				Resources?.UpdateThemeBindings();
-
-				// Update theme bindings in system resources
-				ResourceResolver.UpdateSystemThemeBindings();
-
-				PropagateThemeChanged(root);
-			}
-
-			void PropagateThemeChanged(object instance)
-			{
-
-				// Update ThemeResource references that have changed
-				if (instance is FrameworkElement fe)
-				{
-					fe.UpdateThemeBindings();
-				}
-
-				//Try Panel.Children before ViewGroup.GetChildren - this results in fewer allocations
-				if (instance is Controls.Panel p)
-				{
-					foreach (object o in p.Children)
-					{
-						PropagateThemeChanged(o);
-					}
-				}
-				else if (instance is ViewGroup g)
-				{
-					foreach (object o in g.GetChildren())
-					{
-						PropagateThemeChanged(o);
-					}
-				}
-			}
-
-			// On some platforms, the user-set root is not the topmost FrameworkElement
-			FrameworkElement GetTreeRoot()
-			{
-				var current = Windows.UI.Xaml.Window.Current.Content as FrameworkElement;
-				var parent = current?.GetVisualTreeParent();
-				while (parent is FrameworkElement feParent)
-				{
-					current = feParent;
-					parent = current?.GetVisualTreeParent();
-				}
-				return current;
-			}
+			FrameworkElement.PropagateThemeScope(
+				Windows.UI.Xaml.Window.Current.Content,
+				ElementTheme.Default);
 		}
 	}
 }
