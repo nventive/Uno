@@ -93,13 +93,13 @@ namespace Windows.UI.Xaml
 		}
 
 		public bool ContainsKey(object key) => ContainsKey(key, shouldCheckSystem: true, ElementTheme.Default);
-		public bool ContainsKey(object key, bool shouldCheckSystem, ElementTheme elementTheme) => _values.ContainsKey(key) || ContainsKeyMerged(key) || ContainsKeyTheme(key, elementTheme)
+
+		internal bool ContainsKey(object key, bool shouldCheckSystem, ElementTheme elementTheme) => _values.ContainsKey(key) || ContainsKeyMerged(key) || ContainsKeyTheme(key, elementTheme)
 			|| (shouldCheckSystem && !IsSystemDictionary && ResourceResolver.ContainsKeySystem(key));
 
 		public bool TryGetValue(object key, out object value) => TryGetValue(key, out value, shouldCheckSystem: true, ElementTheme.Default);
-
-		/// <remarks>Should become internal in the future?</remarks>
-		public bool TryGetValue(object key, out object value, bool shouldCheckSystem, ElementTheme elementTheme)
+	
+		internal bool TryGetValue(object key, out object value, bool shouldCheckSystem, ElementTheme elementTheme)
 		{
 			if (_values.TryGetValue(key, out value))
 			{
