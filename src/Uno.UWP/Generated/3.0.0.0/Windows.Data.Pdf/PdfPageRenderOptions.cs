@@ -1,15 +1,15 @@
-#pragma warning disable 108 // new keyword hiding
+﻿#pragma warning disable 108 // new keyword hiding
 #pragma warning disable 114 // new keyword hiding
 namespace Windows.Data.Pdf
 {
-	#if __ANDROID__ || __IOS__ || NET461 || __WASM__ || __MACOS__
+#if false || __IOS__ || NET461 || __WASM__ || __MACOS__
 	[global::Uno.NotImplemented]
-	#endif
-	public  partial class PdfPageRenderOptions 
+#endif
+	public partial class PdfPageRenderOptions
 	{
-		#if __ANDROID__ || __IOS__ || NET461 || __WASM__ || __MACOS__
+#if false || __IOS__ || NET461 || __WASM__ || __MACOS__
 		[global::Uno.NotImplemented]
-		public  global::Windows.Foundation.Rect SourceRect
+		public global::Windows.Foundation.Rect SourceRect
 		{
 			get
 			{
@@ -20,10 +20,10 @@ namespace Windows.Data.Pdf
 				global::Windows.Foundation.Metadata.ApiInformation.TryRaiseNotImplemented("Windows.Data.Pdf.PdfPageRenderOptions", "Rect PdfPageRenderOptions.SourceRect");
 			}
 		}
-		#endif
-		#if __ANDROID__ || __IOS__ || NET461 || __WASM__ || __MACOS__
+#endif
+#if false || __IOS__ || NET461 || __WASM__ || __MACOS__
 		[global::Uno.NotImplemented]
-		public  bool IsIgnoringHighContrast
+		public bool IsIgnoringHighContrast
 		{
 			get
 			{
@@ -34,10 +34,10 @@ namespace Windows.Data.Pdf
 				global::Windows.Foundation.Metadata.ApiInformation.TryRaiseNotImplemented("Windows.Data.Pdf.PdfPageRenderOptions", "bool PdfPageRenderOptions.IsIgnoringHighContrast");
 			}
 		}
-		#endif
-		#if __ANDROID__ || __IOS__ || NET461 || __WASM__ || __MACOS__
+#endif
+#if false || __IOS__ || NET461 || __WASM__ || __MACOS__
 		[global::Uno.NotImplemented]
-		public  uint DestinationWidth
+		public uint DestinationWidth
 		{
 			get
 			{
@@ -48,10 +48,10 @@ namespace Windows.Data.Pdf
 				global::Windows.Foundation.Metadata.ApiInformation.TryRaiseNotImplemented("Windows.Data.Pdf.PdfPageRenderOptions", "uint PdfPageRenderOptions.DestinationWidth");
 			}
 		}
-		#endif
-		#if __ANDROID__ || __IOS__ || NET461 || __WASM__ || __MACOS__
+#endif
+#if false || __IOS__ || NET461 || __WASM__ || __MACOS__
 		[global::Uno.NotImplemented]
-		public  uint DestinationHeight
+		public uint DestinationHeight
 		{
 			get
 			{
@@ -62,10 +62,10 @@ namespace Windows.Data.Pdf
 				global::Windows.Foundation.Metadata.ApiInformation.TryRaiseNotImplemented("Windows.Data.Pdf.PdfPageRenderOptions", "uint PdfPageRenderOptions.DestinationHeight");
 			}
 		}
-		#endif
-		#if __ANDROID__ || __IOS__ || NET461 || __WASM__ || __MACOS__
+#endif
+#if false || __IOS__ || NET461 || __WASM__ || __MACOS__
 		[global::Uno.NotImplemented]
-		public  global::System.Guid BitmapEncoderId
+		public global::System.Guid BitmapEncoderId
 		{
 			get
 			{
@@ -76,10 +76,10 @@ namespace Windows.Data.Pdf
 				global::Windows.Foundation.Metadata.ApiInformation.TryRaiseNotImplemented("Windows.Data.Pdf.PdfPageRenderOptions", "Guid PdfPageRenderOptions.BitmapEncoderId");
 			}
 		}
-		#endif
-		#if __ANDROID__ || __IOS__ || NET461 || __WASM__ || __MACOS__
+#endif
+#if false || __IOS__ || NET461 || __WASM__ || __MACOS__
 		[global::Uno.NotImplemented]
-		public  global::Windows.UI.Color BackgroundColor
+		public global::Windows.UI.Color BackgroundColor
 		{
 			get
 			{
@@ -90,14 +90,14 @@ namespace Windows.Data.Pdf
 				global::Windows.Foundation.Metadata.ApiInformation.TryRaiseNotImplemented("Windows.Data.Pdf.PdfPageRenderOptions", "Color PdfPageRenderOptions.BackgroundColor");
 			}
 		}
-		#endif
-		#if __ANDROID__ || __IOS__ || NET461 || __WASM__ || __MACOS__
+#endif
+#if false || __IOS__ || NET461 || __WASM__ || __MACOS__
 		[global::Uno.NotImplemented]
-		public PdfPageRenderOptions() 
+		public PdfPageRenderOptions()
 		{
 			global::Windows.Foundation.Metadata.ApiInformation.TryRaiseNotImplemented("Windows.Data.Pdf.PdfPageRenderOptions", "PdfPageRenderOptions.PdfPageRenderOptions()");
 		}
-		#endif
+#endif
 		// Forced skipping of method Windows.Data.Pdf.PdfPageRenderOptions.PdfPageRenderOptions()
 		// Forced skipping of method Windows.Data.Pdf.PdfPageRenderOptions.SourceRect.get
 		// Forced skipping of method Windows.Data.Pdf.PdfPageRenderOptions.SourceRect.set
