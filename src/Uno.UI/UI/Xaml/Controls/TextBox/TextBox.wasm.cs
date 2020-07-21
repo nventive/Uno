@@ -1,5 +1,7 @@
-﻿using Uno.Extensions;
+﻿using System.Diagnostics;
+using Uno.Extensions;
 using Uno.UI.UI.Xaml.Documents;
+using Uno.UI.Xaml;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 
@@ -8,7 +10,7 @@ namespace Windows.UI.Xaml.Controls
 	public partial class TextBox : Control
 	{
 		private TextBoxView _textBoxView;
-		
+
 		protected override bool IsDelegatingFocusToTemplateChild() => true; // _textBoxView
 		partial void OnTextClearedPartial() => FocusTextView();
 		internal bool FocusTextView() => FocusManager.FocusNative(_textBoxView);
@@ -72,7 +74,7 @@ namespace Windows.UI.Xaml.Controls
 
 		partial void UpdateFontPartial()
 		{
-			if(_textBoxView == null)
+			if (_textBoxView == null)
 			{
 				return;
 			}
@@ -91,6 +93,29 @@ namespace Windows.UI.Xaml.Controls
 		partial void OnTextAlignmentChangedPartial(DependencyPropertyChangedEventArgs e)
 		{
 			_textBoxView?.SetTextAlignment(TextAlignment);
+		}
+
+		partial void OnSelectionHighlightColorChangedPartial(Color color)
+		{
+			if (_textBoxView != null)
+			{
+				Color foregroundColor = Colors.White;
+
+				//check highlight color luminance to choose if black or white foreground is more appropriate
+				var luminance = (0.299 * color.R + 0.587 * color.G + 0.114 * color.B) / 255;
+				if (luminance > 0.5)
+				{
+					foregroundColor = Colors.Black;
+				}				
+				WindowManagerInterop.SetGeneralStyle(HtmlId + "_SelectionHighlightStyle",
+					$"[id='{HtmlId}'] ::selection {{ background: {color.ToCssString()}; color: {foregroundColor.ToCssString()}; }}");
+			}
+		}
+
+		protected override void OnUnloaded()
+		{
+			base.OnUnloaded();
+			WindowManagerInterop.RemoveGeneralStyle(HtmlId + "_SelectionHighlightStyle");
 		}
 
 		partial void OnIsSpellCheckEnabledChangedPartial(DependencyPropertyChangedEventArgs e)

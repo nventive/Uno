@@ -5,6 +5,7 @@ using System.Linq;
 using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Windows.Markup;
 using Uno.Extensions;
 using Uno.Foundation;
 using Uno.Foundation.Interop;
@@ -418,6 +419,21 @@ namespace Uno.UI.Xaml
 
 			[MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPStr)]
 			public string[] Pairs;
+		}
+
+		internal static void SetGeneralStyle(string styleId, string cssText)
+		{
+			var stylesStr = WebAssemblyRuntime.EscapeJs(cssText);
+			var command = "Uno.UI.WindowManager.current.setGeneralStyle(\"" + styleId + "\", \"" + stylesStr + "\");";
+
+			WebAssemblyRuntime.InvokeJS(command);
+		}
+
+		internal static void RemoveGeneralStyle(string styleId)
+		{
+			var command = "Uno.UI.WindowManager.current.removeGeneralStyle(\"" + styleId + "\");";
+
+			WebAssemblyRuntime.InvokeJS(command);
 		}
 
 		#endregion

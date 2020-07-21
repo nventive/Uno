@@ -170,7 +170,6 @@ namespace Windows.UI.Xaml.Controls
 				if (scb != null)
 				{
 					this.TextColor = scb.Color;
-					this.TintColor = scb.Color;
 				}
 			}
 		}

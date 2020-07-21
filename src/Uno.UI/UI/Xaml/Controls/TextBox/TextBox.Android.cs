@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Android.App;
+using Android.Content.Res;
 using Android.Graphics;
 using Android.Runtime;
 using Android.Text;
@@ -323,6 +324,14 @@ namespace Windows.UI.Xaml.Controls
 				}
 
 				_textBoxView.InputType = inputType;
+			}
+		}
+
+		partial void OnSelectionHighlightColorChangedPartial(Color color)
+		{
+			if (_textBoxView != null)
+			{
+				_textBoxView.SetHighlightColor(new Android.Graphics.Color(color.R, color.G, color.B, color.A));
 			}
 		}
 

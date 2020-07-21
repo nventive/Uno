@@ -608,6 +608,26 @@ namespace Uno.UI {
 			return true;
 		}
 
+		public setGeneralStyle(styleElementId: string, cssText: string) {
+			let styleElement = document.getElementById(styleElementId) as HTMLStyleElement;
+			if (!styleElement) {
+				styleElement = document.createElement("style");
+				styleElement.id = styleElementId;
+				styleElement.type = "text/css";
+				document.body.appendChild(styleElement);
+			}
+			styleElement.innerHTML = "";
+			var styleText = document.createTextNode(cssText);
+			styleElement.appendChild(styleText);
+		}
+
+		public removeGeneralStyle(styleElementId: string) {
+			let styleElement = document.getElementById(styleElementId) as HTMLStyleElement;
+			if (styleElement) {
+				document.body.removeChild(styleElement);
+			}
+		}
+
 		/**
 		 * Set CSS classes on an element from a specified list
 		 */
