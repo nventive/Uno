@@ -17,16 +17,66 @@ namespace Windows.Extensions
 	/// <summary>
 	/// A service that determines if a permission is granted and if not, request it to the user.
 	/// </summary>
-	public class PermissionsHelper
+	public partial class PermissionsHelper
 	{
 		private static FuncAsync<string, bool> _tryGetPermission;
 		private static FuncAsync<string, bool> _checkPermission;
+		private static Func<string[], string[], string[]> _getMissingPermissions;
+		private static FuncAsync<string[], string[], bool, bool> _tryGetPermissionsAsync;
 
-		internal static void Initialize(FuncAsync<string, bool> getter, FuncAsync<string, bool> checkPermission)
+		internal static void Initialize(FuncAsync<string, bool> getter, FuncAsync<string, bool> checkPermission, Func<string[], string[], string[]> getMissingPermissions, FuncAsync<string[], string[], bool, bool> tryGetPermissionsAsync)
 		{
 			_tryGetPermission = getter;
 			_checkPermission = checkPermission;
+			_getMissingPermissions = getMissingPermissions;
+			_tryGetPermissionsAsync = tryGetPermissionsAsync;
 		}
+
+		/// <summary>
+		/// Return null on error, or array of permission to be asked for (not granted at this time). Both parameters can be null
+		/// </summary>
+		/// <param name="requiredPermissions">Permissions that are required. Can be null.</param>
+		/// <param name="optionalPermissions">Permissions that are required only if declared in Manifest. Can be null.</param>
+		/// <returns>Array of all permission that is not granted at this moment (can be empty!), or null if some error occured</returns>
+		public static string[] MissingPermissions(string[] requiredPermissions, string[] optionalPermissions)
+			=> _getMissingPermissions(requiredPermissions, optionalPermissions);
+
+		/// <summary>
+		/// Return null on error, or array of permission to be asked for (not granted at this time).
+		/// </summary>
+		/// <param name="requiredPermission">Permission that is </param>
+		/// <returns>Array with permission if it is not granted at this moment (can be empty!), or null if some error occured</returns>
+		public static string[] MissingPermissions(string requiredPermission)
+			=> _getMissingPermissions(new string[] {requiredPermission}, null);
+
+		/// <summary>
+		/// Return true if requiredPermission is granted. Show dialog asking for missing permission.
+		/// </summary>
+		/// <param name="requiredPermission">Permission that are required</param>
+		/// <returns>Bool if permission is granted, false if not</returns>
+		public static Task<bool> TryAskPermissionAsync(string requiredPermission)
+			=> TryAskPermissionAsync(new string[] { requiredPermission }, null);
+
+		/// <summary>
+		/// Return true if granted are: requiredPermission, and optionalPermissions (if mentioned in Manifest). Show dialog asking for missing permissions..
+		/// </summary>
+		/// <param name="requiredPermissions">Permission that are required</param>
+		/// <param name="optionalPermissions">Permission that are required only if declared in Manifest</param>
+		/// <returns>Bool if all permissions are granted, false if any of them is not granted</returns>
+		public static Task<bool> TryAskPermissionAsync(string requiredPermission, string optionalPermission)
+			=> TryAskPermissionAsync(new string[] { requiredPermission }, new string[] { optionalPermission });
+
+
+		/// <summary>
+		/// Return true if granted are: all requiredPermissions, and all optionalPermissions mentioned in Manifest. Show dialog asking for missing permissions. Both parameters can be null.
+		/// </summary>
+		/// <param name="requiredPermissions">Permissions that are required. Can be null.</param>
+		/// <param name="optionalPermissions">Permissions that are required only if declared in Manifest. Can be null.</param>
+		/// <param name="ignoreErrors">if 'true', then do not throw exception on error, and simply retur false</param>
+		/// <returns>Bool if all permissions are granted, false if any of them is not granted</returns>
+		public static Task<bool> TryAskPermissionAsync(string[] requiredPermissions, string[] optionalPermissions, bool ignoreErrors = false)
+			=> _tryGetPermissionsAsync(CancellationToken.None, requiredPermissions, optionalPermissions, ignoreErrors);
+
 
 		/// <summary>
 		/// Checks if the given Android permission is declared in manifest file.
