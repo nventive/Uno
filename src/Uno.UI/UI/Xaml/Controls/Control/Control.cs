@@ -44,23 +44,36 @@ namespace Windows.UI.Xaml.Controls
 
 		private void InitializeControl()
 		{
-			SetDefaultForeground(ForegroundProperty);
+			UpdateDefaultForeground();
 			SubscribeToOverridenRoutedEvents();
 			OnIsFocusableChanged();
 
 			DefaultStyleKey = typeof(Control);
 		}
-		
+
 		protected object DefaultStyleKey { get; set; }
 
 		protected override bool IsSimpleLayout => true;
+
+		private void UpdateDefaultForeground()
+		{
+			// override the default value from dependency property based on actual theme
+			if (ActualTheme == ElementTheme.Default)
+			{
+				throw new InvalidOperationException("Actual theme may not be default");
+			}
+			this.SetValue(
+				ForegroundProperty,
+				ActualTheme == ElementTheme.Light ?
+					SolidColorBrushHelper.Black : SolidColorBrushHelper.White,
+				DependencyPropertyValuePrecedences.DefaultValue);
+		}
 
 		internal override void UpdateThemeBindings()
 		{
 			base.UpdateThemeBindings();
 
-			//override the default value from dependency property based on application theme
-			SetDefaultForeground(ForegroundProperty);
+			UpdateDefaultForeground();
 		}
 
 		private protected override Type GetDefaultStyleKey() => DefaultStyleKey as Type;

@@ -92,12 +92,14 @@ namespace Windows.UI.Xaml
 			}
 		}
 
-		public bool ContainsKey(object key) => ContainsKey(key, shouldCheckSystem: true);
-		public bool ContainsKey(object key, bool shouldCheckSystem) => _values.ContainsKey(key) || ContainsKeyMerged(key) || ContainsKeyTheme(key)
+		public bool ContainsKey(object key) => ContainsKey(key, shouldCheckSystem: true, ElementTheme.Default);
+
+		internal bool ContainsKey(object key, bool shouldCheckSystem, ElementTheme elementTheme) => _values.ContainsKey(key) || ContainsKeyMerged(key) || ContainsKeyTheme(key, elementTheme)
 			|| (shouldCheckSystem && !IsSystemDictionary && ResourceResolver.ContainsKeySystem(key));
 
-		public bool TryGetValue(object key, out object value) => TryGetValue(key, out value, shouldCheckSystem: true);
-		public bool TryGetValue(object key, out object value, bool shouldCheckSystem)
+		public bool TryGetValue(object key, out object value) => TryGetValue(key, out value, shouldCheckSystem: true, ElementTheme.Default);
+	
+		internal bool TryGetValue(object key, out object value, bool shouldCheckSystem, ElementTheme elementTheme)
 		{
 			if (_values.TryGetValue(key, out value))
 			{
@@ -106,19 +108,19 @@ namespace Windows.UI.Xaml
 				return true;
 			}
 
-			if (GetFromMerged(key, out value))
+			if (GetFromMerged(key, out value, elementTheme))
 			{
 				return true;
 			}
 
-			if (GetFromTheme(key, out value))
+			if (GetFromTheme(key, out value, elementTheme))
 			{
 				return true;
 			}
 
 			if (shouldCheckSystem && !IsSystemDictionary) // We don't fall back on system resources from within a system-defined dictionary, to avoid an infinite recurse
 			{
-				return ResourceResolver.TrySystemResourceRetrieval(key, out value);
+				return ResourceResolver.TrySystemResourceRetrieval(key, out value, elementTheme);
 			}
 
 			return false;
@@ -129,7 +131,10 @@ namespace Windows.UI.Xaml
 			get
 			{
 				object value;
-				TryGetValue(key, out value);
+				if (!TryGetValue(key, out value))
+				{
+					throw new KeyNotFoundException($"Resource with key {key} was not found.");
+				}
 
 				return value;
 			}
@@ -192,12 +197,12 @@ namespace Windows.UI.Xaml
 			return false;
 		}
 
-		private bool GetFromMerged(object key, out object value)
+		private bool GetFromMerged(object key, out object value, ElementTheme elementTheme)
 		{
 			// Check last dictionary first - //https://docs.microsoft.com/en-us/windows/uwp/design/controls-and-patterns/resourcedictionary-and-xaml-resource-references#merged-resource-dictionaries
 			for (int i = MergedDictionaries.Count - 1; i >= 0; i--)
 			{
-				if (MergedDictionaries[i].TryGetValue(key, out value, shouldCheckSystem: false))
+				if (MergedDictionaries[i].TryGetValue(key, out value, shouldCheckSystem: false, elementTheme))
 				{
 					return true;
 				}
@@ -212,7 +217,7 @@ namespace Windows.UI.Xaml
 		{
 			for (int i = MergedDictionaries.Count - 1; i >= 0; i--)
 			{
-				if (MergedDictionaries[i].ContainsKey(key, shouldCheckSystem: false))
+				if (MergedDictionaries[i].ContainsKey(key, shouldCheckSystem: false, ElementTheme.Default))
 				{
 					return true;
 				}
@@ -221,12 +226,25 @@ namespace Windows.UI.Xaml
 			return false;
 		}
 
-		private ResourceDictionary GetThemeDictionary() => GetThemeDictionary(Themes.Active) ?? GetThemeDictionary(Themes.Default);
+		private ResourceDictionary GetCurrentThemeDictionary(ElementTheme elementTheme)
+		{
+			var theme = Themes.Active;
+			switch (elementTheme)
+			{
+				case ElementTheme.Dark:
+					theme = nameof(ElementTheme.Dark);
+					break;
+				case ElementTheme.Light:
+					theme = nameof(ElementTheme.Light);
+					break;
+			}
+			return GetThemeDictionaryByKey(theme);
+		}
 
-		private ResourceDictionary GetThemeDictionary(string theme)
+		private ResourceDictionary GetThemeDictionaryByKey(string themeKey)
 		{
 			object dict = null;
-			if (_themeDictionaries?.TryGetValue(theme, out dict, shouldCheckSystem: false) ?? false)
+			if (_themeDictionaries?.TryGetValue(themeKey, out dict, shouldCheckSystem: false, ElementTheme.Default) ?? false)
 			{
 				return dict as ResourceDictionary;
 			}
@@ -234,23 +252,32 @@ namespace Windows.UI.Xaml
 			return null;
 		}
 
-		private bool GetFromTheme(object key, out object value)
+		private bool GetFromTheme(object key, out object value, ElementTheme elementTheme)
 		{
-			var dict = GetThemeDictionary();
+			// Attempt to get requested theme dictionary first.
+			var dict = GetCurrentThemeDictionary(elementTheme);
 
-			if (dict != null && dict.TryGetValue(key, out value, shouldCheckSystem: false))
+			if (dict != null && dict.TryGetValue(key, out value, shouldCheckSystem: false, elementTheme))
 			{
 				return true;
 			}
 
-			return GetFromThemeMerged(key, out value);
+			// Get default theme dictionary as a fallback.
+			dict = GetThemeDictionaryByKey(Themes.Default);
+
+			if (dict != null && dict.TryGetValue(key, out value, shouldCheckSystem: false, elementTheme))
+			{
+				return true;
+			}
+
+			return GetFromThemeMerged(key, out value, elementTheme);
 		}
 
-		private bool GetFromThemeMerged(object key, out object value)
+		private bool GetFromThemeMerged(object key, out object value, ElementTheme elementTheme)
 		{
 			for (int i = MergedDictionaries.Count - 1; i >= 0; i--)
 			{
-				if (MergedDictionaries[i].GetFromTheme(key, out value))
+				if (MergedDictionaries[i].GetFromTheme(key, out value, elementTheme))
 				{
 					return true;
 				}
@@ -262,16 +289,19 @@ namespace Windows.UI.Xaml
 		}
 
 
-		private bool ContainsKeyTheme(object key)
+		private bool ContainsKeyTheme(object key, ElementTheme elementTheme)
 		{
-			return GetThemeDictionary()?.ContainsKey(key, shouldCheckSystem: false) ?? ContainsKeyThemeMerged(key);
+			return
+				GetCurrentThemeDictionary(elementTheme)?.ContainsKey(key, shouldCheckSystem: false, elementTheme) ??
+				GetThemeDictionaryByKey(Themes.Default)?.ContainsKey(key, shouldCheckSystem: false, elementTheme) ??
+				ContainsKeyThemeMerged(key, elementTheme);
 		}
 
-		private bool ContainsKeyThemeMerged(object key)
+		private bool ContainsKeyThemeMerged(object key, ElementTheme elementTheme)
 		{
 			for (int i = MergedDictionaries.Count - 1; i >= 0; i--)
 			{
-				if (MergedDictionaries[i].ContainsKeyTheme(key))
+				if (MergedDictionaries[i].ContainsKeyTheme(key, elementTheme))
 				{
 					return true;
 				}

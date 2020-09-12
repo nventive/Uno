@@ -1096,7 +1096,9 @@ namespace Windows.UI.Xaml
 		/// <summary>
 		/// Do a tree walk to find the correct values of StaticResource and ThemeResource assignations.
 		/// </summary>
-		internal void UpdateResourceBindings(bool isThemeChangedUpdate, ResourceDictionary? containingDictionary = null)
+		/// <param name="isThemeChangedUpdate">Indicates whether the update is caused by theme change.</param>
+		/// <param name="elementTheme">Requested theme of the element.</param>
+		internal void UpdateResourceBindings(bool isThemeChangedUpdate, ResourceDictionary? containingDictionary = null, ElementTheme elementTheme)
 		{
 			if (_resourceBindings == null || !_resourceBindings.HasBindings)
 			{
@@ -1115,7 +1117,7 @@ namespace Windows.UI.Xaml
 					var wasSet = false;
 					foreach (var dict in dictionariesInScope)
 					{
-						if (dict.TryGetValue(tuple.Binding.ResourceKey, out var value, shouldCheckSystem: false))
+						if (dict.TryGetValue(tuple.Binding.ResourceKey, out var value, shouldCheckSystem: false, elementTheme))
 						{
 							wasSet = true;
 							SetValue(tuple.Property, BindingPropertyHelper.Convert(() => tuple.Property.Type, value), tuple.Binding.Precedence);
@@ -1125,7 +1127,7 @@ namespace Windows.UI.Xaml
 
 					if (!wasSet && isThemeChangedUpdate && tuple.Binding.IsThemeResourceExtension)
 					{
-						if (ResourceResolver.TryTopLevelRetrieval(tuple.Binding.ResourceKey, tuple.Binding.ParseContext, out var value))
+						if (ResourceResolver.TryTopLevelRetrieval(tuple.Binding.ResourceKey, tuple.Binding.ParseContext, out var value, elementTheme))
 						{
 							SetValue(tuple.Property, BindingPropertyHelper.Convert(() => tuple.Property.Type, value), tuple.Binding.Precedence);
 						}
@@ -1252,7 +1254,7 @@ namespace Windows.UI.Xaml
 		{
 			foreach (var dict in GetResourceDictionaries(includeAppResources: true))
 			{
-				if (dict.TryGetValue(_originalObjectType, out var style, shouldCheckSystem: false))
+				if (dict.TryGetValue(_originalObjectType, out var style, shouldCheckSystem: false, ElementTheme.Default))
 				{
 					return style as Style;
 				}
