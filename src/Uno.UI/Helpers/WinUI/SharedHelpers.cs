@@ -714,7 +714,7 @@ namespace Uno.UI.Helpers.WinUI
 		}
 
 		// Be cautious: this function may introduce memory leak because Source holds strong reference to target too
-		// There’s an intermediary object – the BindingExpression when BindingOperations::SetBinding
+		// Thereï¿½s an intermediary object ï¿½ the BindingExpression when BindingOperations::SetBinding
 		// For example, if source is NavigationView and target is content control,
 		// and there is strong reference: NavigationView -> ContentControl
 		// BindingExpression.Source also make a strong reference to NavigationView
