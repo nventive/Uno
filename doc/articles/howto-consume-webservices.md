@@ -1304,13 +1304,13 @@ You will start by adding the data models.
 1. To add support for the put operation, locate the comment **// Insert PutAsync method below here** and replace it with the following code:
 
     ```csharp
-    // Insert PostAsync method below here
-    protected async Task<string> PostAsync(string url, string payload, Dictionary<string, string> headers = null)
+    // Insert PutAsync method below here
+    protected async Task<string> PutAsync(string url, string payload, Dictionary<string, string> headers = null)
     {
-        using (var request = CreateRequestMessage(HttpMethod.Post, url, headers))
+        using (var request = CreateRequestMessage(HttpMethod.Put, url, headers))
         {
             request.Content = new StringContent(payload, Encoding.UTF8, "application/json");
-            using (var response = await _client.SendAsync(request))
+            using (var response = await _client.PutAsync(request.RequestUri, request.Content))
             {
                 if (response.IsSuccessStatusCode)
                 {
