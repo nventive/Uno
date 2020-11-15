@@ -1310,7 +1310,7 @@ You will start by adding the data models.
         using (var request = CreateRequestMessage(HttpMethod.Put, url, headers))
         {
             request.Content = new StringContent(payload, Encoding.UTF8, "application/json");
-            using (var response = await _client.PutAsync(request.RequestUri, request.Content))
+            using (var response = await _client.SendAsync(request))
             {
                 if (response.IsSuccessStatusCode)
                 {
