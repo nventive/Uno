@@ -1679,7 +1679,7 @@ In this task you will add the favorites capability to the Main view-model.
     You should notice the use of the `.ConfigureAwait(false)` code throughout to ensure the UI is not blocked. You will also notice the use of the **DispatchAsync** helper to ensure the **CollectionChanged** event raised by the insertion is raised on the UI thread so any bound control updates correctly.
 
 
-1. Finally, to add support for deleting a favorite, locate the **// Insert AddFavorite below here** comment and replace it with the following code:
+1. Finally, to add support for deleting a favorite, locate the **// Insert DeleteFavorite below here** comment and replace it with the following code:
 
     ```csharp
     // Insert DeleteFavorite below here
