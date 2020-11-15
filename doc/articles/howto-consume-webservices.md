@@ -1329,9 +1329,9 @@ You will start by adding the data models.
 
 1. To add a class for the Favorites API service, in the **TheCatApiClient.Shared** project, right-click the **WebServices** folder, select **Add** and click **Class...**
 
-1. On the **Add New Item** dialog, in the **Name** field, enter **FavoritesApi.cs**
+1. On the **Add New Item** dialog, in the **Name** field, enter **ImageApi.cs**
 
-1. In the editor, replace the content of the **FavoritesApi.cs** class with the following:
+1. In the editor, replace the content of the **ImageApi.cs** class with the following:
 
     ```csharp
     using System.Collections.Generic;
