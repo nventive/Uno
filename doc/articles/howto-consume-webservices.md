@@ -1481,22 +1481,16 @@ You will start by adding the data models.
     }
     ```
 
-    In order to add an image to your favorites, the API expects a JSON payload that contains the image ID and an optional **sub_id** value. The **Add** methods constructs this using a **Dictionary** that is then serialized to JSON and submitted as the payload. Rather than returning a **Favorite**, it returns a **Response** instance which contains the new Favorite ID.
+    In order to add an image to your favorites, the api expects a JSON payload that contains the image ID and an optional **sub_id** value. The **Add** methods constructs this using a **Dictionary** that is then serialized to JSON and submitted as the payload. Rather than returning a **Favorite**, it returns a **Response** instance which contains the new Favorite ID.
 
-1. To add support for adding an image to your favorites, locate the comment **// Insert Add below here** and replace it with the following code:
+1. To add support for deleting an image from your favorites, locate the comment **// Insert Delete below here** and replace it with the following code:
 
     ```csharp
-    // Insert Add below here
-    public async Task<Response> Add(CatImage image)
+    // Insert Delete below here
+    public async Task<Response> Delete(Favorite favorite)
     {
-        var result = await this.PostAsync(
-            $"https://api.thecatapi.com/v1/favourites",
-            JsonSerializer.Serialize(
-                new Dictionary<string, string>
-                {
-                    { "image_id", image.Id },
-                    { "sub_id", "uno-client" }
-                }),
+        var result = await this.DeleteAsync(
+            $"https://api.thecatapi.com/v1/favourites/{favorite.Id}",
             _defaultHeaders);
 
         if (result != null)
@@ -1508,7 +1502,7 @@ You will start by adding the data models.
     }
     ```
 
-    In order to add an image to your favorites, the api expects a JSON payload that contains the image ID and an optional **sub_id** value. The **Add** methods constructs this using a **Dictionary** that is then serialized to JSON and submitted as the payload. Rather than returning a **Favorite**, it returns a **Response** instance which contains the new Favorite ID.
+    In order to delete an image from your favorites, the API expects a JSON payload that contains the favorite ID value. The **Delete** method submits the favorite ID value in the url. The method returns a **Response** instance.
 
 1. The implementation of **FavoritesApi** should look similar to:
 
