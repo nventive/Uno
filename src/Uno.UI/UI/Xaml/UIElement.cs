@@ -83,12 +83,6 @@ namespace Windows.UI.Xaml
 
 		partial void OnUidChangedPartial();
 
-		public XamlRoot XamlRoot
-		{
-			get => _xamlRoot ?? XamlRoot.Current;
-			set => _xamlRoot = value;
-		}
-
 		#region Clip DependencyProperty
 
 		public RectangleGeometry Clip
