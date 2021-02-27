@@ -44,7 +44,7 @@ $ANDROID_HOME/emulator/emulator -accel-check
 echo "Starting emulator"
 
 # Start emulator in background
-nohup $ANDROID_HOME/emulator/emulator -avd xamarin_android_emulator -skin 1280x800 -memory 2048 -no-audio -no-snapshot -netfast -qemu > /dev/null 2>&1 &
+nohup $ANDROID_HOME/emulator/emulator -avd xamarin_android_emulator -skin 1280x800 -memory 2048 -no-audio -no-window -no-snapshot > /dev/null 2>&1 &
 
 export IsUiAutomationMappingEnabled=true
 
@@ -59,6 +59,9 @@ $BUILD_SOURCESDIRECTORY/build/android-uitest-wait-systemui.sh
 
 # list active devices
 $ANDROID_HOME/platform-tools/adb devices
+
+# Workaround for https://github.com/microsoft/appcenter/issues/1451
+$ANDROID_HOME/platform-tools/adb shell settings put global hidden_api_policy 1
 
 echo "Emulator started"
 
