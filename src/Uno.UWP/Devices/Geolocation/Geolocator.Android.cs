@@ -18,6 +18,8 @@ using Windows.Foundation.Collections;
 using Windows.Foundation.Metadata;
 using Windows.UI.Core;
 
+// empty change - forcing build restart
+
 namespace Windows.Devices.Geolocation
 {
 	public sealed partial class Geolocator : Java.Lang.Object, ILocationListener
