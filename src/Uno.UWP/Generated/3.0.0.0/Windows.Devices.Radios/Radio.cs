@@ -49,7 +49,7 @@ namespace Windows.Devices.Radios
 		// Forced skipping of method Windows.Devices.Radios.Radio.State.get
 		// Forced skipping of method Windows.Devices.Radios.Radio.Name.get
 		// Forced skipping of method Windows.Devices.Radios.Radio.Kind.get
-		#if __ANDROID__ || __IOS__ || NET461 || __WASM__ || __SKIA__ || __NETSTD_REFERENCE__ || __MACOS__
+		#if false || __IOS__ || NET461 || __WASM__ || __SKIA__ || __NETSTD_REFERENCE__ || __MACOS__
 		[global::Uno.NotImplemented("__ANDROID__", "__IOS__", "NET461", "__WASM__", "__SKIA__", "__NETSTD_REFERENCE__", "__MACOS__")]
 		public static global::Windows.Foundation.IAsyncOperation<global::System.Collections.Generic.IReadOnlyList<global::Windows.Devices.Radios.Radio>> GetRadiosAsync()
 		{
