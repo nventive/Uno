@@ -585,6 +585,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Windows_UI_Notifications\ToastNotification.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="$(MSBuildThisFileDirectory)Windows_UI_StartScreen\JumpListTests.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -4421,6 +4425,9 @@
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Windows_UI_Notifications\BadgeNotificationTests.xaml.cs">
       <DependentUpon>BadgeNotificationTests.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Windows_UI_Notifications\ToastNotification.xaml.cs">
+      <DependentUpon>ToastNotification.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Windows_UI_StartScreen\JumpListTests.xaml.cs">
       <DependentUpon>JumpListTests.xaml</DependentUpon>
