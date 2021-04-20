@@ -485,7 +485,7 @@ namespace Windows.ApplicationModel.Contacts
 		{
 			global::Windows.Foundation.Metadata.ApiInformation.TryRaiseNotImplemented("Windows.ApplicationModel.Contacts.Contact", "Contact.Contact()");
 		}
-		#endif
+#endif
 		// Forced skipping of method Windows.ApplicationModel.Contacts.Contact.Contact()
 		// Forced skipping of method Windows.ApplicationModel.Contacts.Contact.Name.get
 		// Forced skipping of method Windows.ApplicationModel.Contacts.Contact.Name.set

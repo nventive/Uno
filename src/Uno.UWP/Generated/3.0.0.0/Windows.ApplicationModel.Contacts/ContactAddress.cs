@@ -111,7 +111,7 @@ namespace Windows.ApplicationModel.Contacts
 		{
 			global::Windows.Foundation.Metadata.ApiInformation.TryRaiseNotImplemented("Windows.ApplicationModel.Contacts.ContactAddress", "ContactAddress.ContactAddress()");
 		}
-		#endif
+#endif
 		// Forced skipping of method Windows.ApplicationModel.Contacts.ContactAddress.ContactAddress()
 		// Forced skipping of method Windows.ApplicationModel.Contacts.ContactAddress.StreetAddress.get
 		// Forced skipping of method Windows.ApplicationModel.Contacts.ContactAddress.StreetAddress.set

@@ -55,7 +55,7 @@ namespace Windows.ApplicationModel.Contacts
 		{
 			global::Windows.Foundation.Metadata.ApiInformation.TryRaiseNotImplemented("Windows.ApplicationModel.Contacts.ContactEmail", "ContactEmail.ContactEmail()");
 		}
-		#endif
+#endif
 		// Forced skipping of method Windows.ApplicationModel.Contacts.ContactEmail.ContactEmail()
 		// Forced skipping of method Windows.ApplicationModel.Contacts.ContactEmail.Address.get
 		// Forced skipping of method Windows.ApplicationModel.Contacts.ContactEmail.Address.set
