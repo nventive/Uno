@@ -1304,10 +1304,10 @@ You will start by adding the data models.
 1. To add support for the put operation, locate the comment **// Insert PutAsync method below here** and replace it with the following code:
 
     ```csharp
-    // Insert PostAsync method below here
-    protected async Task<string> PostAsync(string url, string payload, Dictionary<string, string> headers = null)
+    // Insert PutAsync method below here
+    protected async Task<string> PutAsync(string url, string payload, Dictionary<string, string> headers = null)
     {
-        using (var request = CreateRequestMessage(HttpMethod.Post, url, headers))
+        using (var request = CreateRequestMessage(HttpMethod.Put, url, headers))
         {
             request.Content = new StringContent(payload, Encoding.UTF8, "application/json");
             using (var response = await _client.SendAsync(request))
@@ -1329,9 +1329,9 @@ You will start by adding the data models.
 
 1. To add a class for the Favorites API service, in the **TheCatApiClient.Shared** project, right-click the **WebServices** folder, select **Add** and click **Class...**
 
-1. On the **Add New Item** dialog, in the **Name** field, enter **FavoritesApi.cs**
+1. On the **Add New Item** dialog, in the **Name** field, enter **ImageApi.cs**
 
-1. In the editor, replace the content of the **FavoritesApi.cs** class with the following:
+1. In the editor, replace the content of the **ImageApi.cs** class with the following:
 
     ```csharp
     using System.Collections.Generic;
@@ -1481,22 +1481,16 @@ You will start by adding the data models.
     }
     ```
 
-    In order to add an image to your favorites, the API expects a JSON payload that contains the image ID and an optional **sub_id** value. The **Add** methods constructs this using a **Dictionary** that is then serialized to JSON and submitted as the payload. Rather than returning a **Favorite**, it returns a **Response** instance which contains the new Favorite ID.
+    In order to add an image to your favorites, the api expects a JSON payload that contains the image ID and an optional **sub_id** value. The **Add** methods constructs this using a **Dictionary** that is then serialized to JSON and submitted as the payload. Rather than returning a **Favorite**, it returns a **Response** instance which contains the new Favorite ID.
 
-1. To add support for adding an image to your favorites, locate the comment **// Insert Add below here** and replace it with the following code:
+1. To add support for deleting an image from your favorites, locate the comment **// Insert Delete below here** and replace it with the following code:
 
     ```csharp
-    // Insert Add below here
-    public async Task<Response> Add(CatImage image)
+    // Insert Delete below here
+    public async Task<Response> Delete(Favorite favorite)
     {
-        var result = await this.PostAsync(
-            $"https://api.thecatapi.com/v1/favourites",
-            JsonSerializer.Serialize(
-                new Dictionary<string, string>
-                {
-                    { "image_id", image.Id },
-                    { "sub_id", "uno-client" }
-                }),
+        var result = await this.DeleteAsync(
+            $"https://api.thecatapi.com/v1/favourites/{favorite.Id}",
             _defaultHeaders);
 
         if (result != null)
@@ -1508,7 +1502,7 @@ You will start by adding the data models.
     }
     ```
 
-    In order to add an image to your favorites, the api expects a JSON payload that contains the image ID and an optional **sub_id** value. The **Add** methods constructs this using a **Dictionary** that is then serialized to JSON and submitted as the payload. Rather than returning a **Favorite**, it returns a **Response** instance which contains the new Favorite ID.
+    In order to delete an image from your favorites, the API expects a JSON payload that contains the favorite ID value. The **Delete** method submits the favorite ID value in the url. The method returns a **Response** instance.
 
 1. The implementation of **FavoritesApi** should look similar to:
 
@@ -1685,7 +1679,7 @@ In this task you will add the favorites capability to the Main view-model.
     You should notice the use of the `.ConfigureAwait(false)` code throughout to ensure the UI is not blocked. You will also notice the use of the **DispatchAsync** helper to ensure the **CollectionChanged** event raised by the insertion is raised on the UI thread so any bound control updates correctly.
 
 
-1. Finally, to add support for deleting a favorite, locate the **// Insert AddFavorite below here** comment and replace it with the following code:
+1. Finally, to add support for deleting a favorite, locate the **// Insert DeleteFavorite below here** comment and replace it with the following code:
 
     ```csharp
     // Insert DeleteFavorite below here
