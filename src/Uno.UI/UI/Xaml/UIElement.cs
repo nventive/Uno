@@ -95,12 +95,6 @@ namespace Windows.UI.Xaml
 
 		partial void OnUidChangedPartial();
 
-		public XamlRoot XamlRoot
-		{
-			get => _xamlRoot ?? XamlRoot.Current;
-			set => _xamlRoot = value;
-		}
-
 		#region Clip DependencyProperty
 
 		public RectangleGeometry Clip
@@ -199,6 +193,18 @@ namespace Windows.UI.Xaml
 			view._renderTransform?.UpdateOrigin(point);
 		}
 		#endregion
+
+		[NotImplemented("__ANDROID__", "__IOS__", "NET461", "__WASM__", "__SKIA__", "__NETSTD_REFERENCE__", "__MACOS__")]
+		public Vector3 Translation { get; set; }
+
+		[NotImplemented("__ANDROID__", "__IOS__", "NET461", "__WASM__", "__SKIA__", "__NETSTD_REFERENCE__", "__MACOS__")]
+		public Vector3 CenterPoint { get; set; }
+		
+		public XamlRoot XamlRoot
+		{
+			get => _xamlRoot ?? XamlRoot.Current;
+			set => _xamlRoot = value;
+		}
 
 		public GeneralTransform TransformToVisual(UIElement visual)
 			=> new MatrixTransform { Matrix = new Matrix(GetTransform(from: this, to: visual)) };
