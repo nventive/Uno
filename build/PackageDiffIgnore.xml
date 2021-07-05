@@ -3746,7 +3746,13 @@
 		<Types>
 		</Types>
 		<Methods>
-		</Methods>
+          <Member
+            fullName="System.Void Windows.Devices.Bluetooth.BluetoothClassOfDevice..ctor()"
+            reason="Doesn't exist in UWP" />
+          <Member
+            fullName="System.Void Windows.Devices.Bluetooth.BluetoothLEAppearance..ctor()"
+            reason="Doesn't exist in UWP" />
+        </Methods>
 		<Fields>
 		</Fields>
 		<Properties>
