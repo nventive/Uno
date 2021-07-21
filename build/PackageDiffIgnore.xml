@@ -3742,7 +3742,7 @@
 		<Properties>
 		</Properties>
 	</IgnoreSet>	
-	<IgnoreSet baseVersion="3.8.11">
+	<IgnoreSet baseVersion="3.8.13">
 		<Types>
 			<Member
 				fullName="Windows.UI.Xaml.Controls.Popup"
