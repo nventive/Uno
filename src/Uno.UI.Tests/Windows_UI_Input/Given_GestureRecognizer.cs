@@ -1329,7 +1329,7 @@ namespace Uno.UI.Tests.Windows_UI_Input
 			=> new HoldingEventArgs(ptId ?? 1, device ?? _currentPointer.Value.device?.PointerDeviceType ?? PointerDeviceType.Touch, new Point(x, y), state);
 
 		public static DraggingEventArgs Drag(PointerPoint point, DraggingState state)
-			=> new DraggingEventArgs(point, state);
+			=> new DraggingEventArgs(point, state, 1);
 
 		public static PointerPoint ProcessDownEvent(
 			this GestureRecognizer sut,
