@@ -52,23 +52,6 @@ namespace Uno.UI.SourceGenerators.XamlGenerator
 		private readonly bool _outputSourceComments = true;
 		private readonly RoslynMetadataHelper _metadataHelper;
 
-		internal const string Title = "XAML Generation Failed";
-		internal const string MessageFormat = "{0}";
-		internal const string Description = "XAML Generation Failed";
-		internal const string Category = "XAML";
-
-		internal static DiagnosticDescriptor GenericXamlErrroRule = new DiagnosticDescriptor(
-#pragma warning disable RS2008 // Enable analyzer release tracking
-			"UXAML0001",
-#pragma warning restore RS2008 // Enable analyzer release tracking
-			Title,
-			MessageFormat,
-			Category,
-			DiagnosticSeverity.Error,
-			isEnabledByDefault: true,
-			description: Description
-		);
-
 		/// <summary>
 		/// If set, code generated from XAML will be annotated with the source method and line # in XamlFileGenerator, for easier debugging.
 		/// </summary>
@@ -294,7 +277,6 @@ namespace Uno.UI.SourceGenerators.XamlGenerator
 					filesToProcess = filesToProcess
 						.WithDegreeOfParallelism(1);
 				}
-
 				var outputFiles = filesToProcess.Select(file => new KeyValuePair<string, string>(
 
 							file.UniqueID,
@@ -317,7 +299,8 @@ namespace Uno.UI.SourceGenerators.XamlGenerator
 									skipUserControlsInVisualTree: _skipUserControlsInVisualTree,
 									shouldAnnotateGeneratedXaml: _shouldAnnotateGeneratedXaml,
 									isUnoAssembly: IsUnoAssembly,
-									isLazyVisualStateManagerEnabled: _isLazyVisualStateManagerEnabled
+									isLazyVisualStateManagerEnabled: _isLazyVisualStateManagerEnabled,
+									generatorContext: _generatorContext
 								)
 								.GenerateFile()
 						)
@@ -380,7 +363,7 @@ namespace Uno.UI.SourceGenerators.XamlGenerator
 			foreach (var exception in Flatten(e))
 			{
 				var diagnostic = Diagnostic.Create(
-					GenericXamlErrroRule,
+				    XamlCodeGenerationDiagnostics.GenericXamlErrorRule,
 					GetExceptionFileLocation(exception),
 					exception.Message);
 
