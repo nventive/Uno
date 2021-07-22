@@ -1,11 +1,40 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Windows.UI.Xaml.Media;
 
 namespace Windows.UI.Xaml.Controls
 {
 	public partial class RelativePanel
 	{
+		#region BorderBrush DependencyProperty
+
+		public Brush BorderBrush
+		{
+			get => (Brush)this.GetValue(BorderBrushProperty);
+			set => this.SetValue(BorderBrushProperty, value);
+		}
+
+		public static DependencyProperty BorderBrushProperty { get; } =
+			DependencyProperty.Register(
+				"BorderBrush",
+				typeof(Brush),
+				typeof(RelativePanel),
+				new FrameworkPropertyMetadata(
+					SolidColorBrushHelper.Transparent,
+					FrameworkPropertyMetadataOptions.ValueInheritsDataContext,
+					propertyChangedCallback: (s, e) =>
+					{
+						var relativePanel = (RelativePanel)s;
+						var newValue = (Brush)e.NewValue;
+						relativePanel.BorderBrushInternal = newValue;
+						relativePanel.OnBorderBrushChanged((Brush)e.OldValue, newValue);
+					}
+				)
+			);
+
+		#endregion
+
 		#region Panel Alignment relationships
 
 		public static bool GetAlignBottomWithPanel(DependencyObject view)

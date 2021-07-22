@@ -31,7 +31,7 @@ namespace Windows.UI.Xaml.Controls
 
 		public void UpdateBorder()
 		{
-			SetBorder(BorderThickness, BorderBrush);
+			SetBorder(BorderThickness, BorderBrushInternal);
 		}
 
 		protected virtual void OnChildrenChanged()
