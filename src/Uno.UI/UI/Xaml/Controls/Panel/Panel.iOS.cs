@@ -97,7 +97,7 @@ namespace Windows.UI.Xaml.Controls
 					this,
 					Background,
 					BorderThickness,
-					BorderBrush,
+					BorderBrushInternal,
 					CornerRadius,
 					backgroundImage
 				);

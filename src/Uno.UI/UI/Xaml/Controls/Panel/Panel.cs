@@ -164,37 +164,7 @@ namespace Windows.UI.Xaml.Controls
 
 		#endregion
 
-		#region BorderBrush Dependency Property
-
-#if XAMARIN_ANDROID
-		private Brush _borderBrushStrongReference;
-#endif
-
-		public Brush BorderBrush
-		{
-			get { return (Brush)this.GetValue(BorderBrushProperty); }
-			set
-			{
-				this.SetValue(BorderBrushProperty, value);
-
-#if XAMARIN_ANDROID
-				_borderBrushStrongReference = value;
-#endif
-			}
-		}
-
-		public static DependencyProperty BorderBrushProperty { get ; } =
-			DependencyProperty.Register(
-				"BorderBrush",
-				typeof(Brush),
-				typeof(Panel),
-				new FrameworkPropertyMetadata(
-					SolidColorBrushHelper.Transparent,
-					FrameworkPropertyMetadataOptions.ValueInheritsDataContext,
-					propertyChangedCallback: (s, e) => ((Panel)s).OnBorderBrushChanged((Brush)e.OldValue, (Brush)e.NewValue)
-				)
-			);
-		#endregion
+		internal Brush BorderBrushInternal { get; set; }
 
 		#region CornerRadius DependencyProperty
 		private static CornerRadius GetCornerRadiusDefaultValue() => CornerRadius.None;

@@ -6,6 +6,7 @@ using System.Text;
 using Uno.UI;
 using Uno.UI.Extensions;
 using Uno.UI.Xaml;
+using Windows.UI.Xaml.Media;
 
 #if XAMARIN_ANDROID
 using View = Android.Views.View;
@@ -28,6 +29,34 @@ namespace Windows.UI.Xaml.Controls
 {
 	partial class Grid
 	{
+		#region BorderBrush DependencyProperty
+
+		public Brush BorderBrush
+		{
+			get => (Brush)this.GetValue(BorderBrushProperty);
+			set => this.SetValue(BorderBrushProperty, value);
+		}
+
+		public static DependencyProperty BorderBrushProperty { get; } =
+			DependencyProperty.Register(
+				"BorderBrush",
+				typeof(Brush),
+				typeof(Grid),
+				new FrameworkPropertyMetadata(
+					SolidColorBrushHelper.Transparent,
+					FrameworkPropertyMetadataOptions.ValueInheritsDataContext,
+					propertyChangedCallback: (s, e) =>
+					{
+						var grid = (Grid)s;
+						var newValue = (Brush)e.NewValue;
+						grid.BorderBrushInternal = newValue;
+						grid.OnBorderBrushChanged((Brush)e.OldValue, newValue);
+					}
+				)
+			);
+
+		#endregion
+
 		#region Row Property
 		[GeneratedDependencyProperty(DefaultValue = 0, AttachedBackingFieldOwner = typeof(UIElement), Attached = true, ChangedCallbackName = nameof(OnGenericPropertyChanged))]
 		public static DependencyProperty RowProperty { get ; } = CreateRowProperty();

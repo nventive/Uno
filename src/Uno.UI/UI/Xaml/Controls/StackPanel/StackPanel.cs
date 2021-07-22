@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using Uno.Disposables;
-using System.Text;
-using Uno.Extensions;
 using System.Collections.Specialized;
+using System.Linq;
+using System.Text;
+using Uno.Disposables;
+using Uno.Extensions;
+using Windows.UI.Xaml.Media;
 #if XAMARIN_ANDROID
 using Android.Views;
 #elif XAMARIN_IOS
@@ -20,6 +21,33 @@ namespace Windows.UI.Xaml.Controls
 {
 	public partial class StackPanel : Panel
 	{
+		#region BorderBrush DependencyProperty
+
+		public Brush BorderBrush
+		{
+			get => (Brush)this.GetValue(BorderBrushProperty);
+			set => this.SetValue(BorderBrushProperty, value);
+		}
+
+		public static DependencyProperty BorderBrushProperty { get; } =
+			DependencyProperty.Register(
+				"BorderBrush",
+				typeof(Brush),
+				typeof(StackPanel),
+				new FrameworkPropertyMetadata(
+					SolidColorBrushHelper.Transparent,
+					FrameworkPropertyMetadataOptions.ValueInheritsDataContext,
+					propertyChangedCallback: (s, e) =>
+					{
+						var stackPanel = (StackPanel)s;
+						var newValue = (Brush)e.NewValue;
+						stackPanel.BorderBrushInternal = newValue;
+						stackPanel.OnBorderBrushChanged((Brush)e.OldValue, newValue);
+					}
+				)
+			);
+
+		#endregion
 
 		#region Orientation DependencyProperty
 
