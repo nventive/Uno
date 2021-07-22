@@ -83,8 +83,15 @@ namespace Windows.UI.Xaml
 		/// and can be removed as breaking change later.</remarks>
 		public bool Insert(object key, object value)
 		{
-			Set(new ResourceKey(key), value, throwIfPresent: false);
-			return true;
+			if (key is { })
+			{
+				Set(new ResourceKey(key), value, throwIfPresent: false);
+				return true;
+			}
+			else
+			{
+				return false;
+			}
 		}
 
 		public bool Remove(object key) => _values.Remove(new ResourceKey(key));
@@ -178,7 +185,13 @@ namespace Windows.UI.Xaml
 
 				return value;
 			}
-			set => Set(new ResourceKey(key), value, throwIfPresent: false);
+			set
+			{
+				if(!(key is null))
+				{
+					Set(new ResourceKey(key), value, throwIfPresent: false);
+				}
+			}
 		}
 
 		private void Set(in ResourceKey resourceKey, object value, bool throwIfPresent)
